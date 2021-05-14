@@ -9,15 +9,15 @@ import (
 var ctx = context.Background()
 
 type RedisConnection struct {
-  host string
-  port string
-  password string
+  Host string
+  Port string
+  Password string
 }
 
 func (connection RedisConnection) NewClient() *redis.Client {
   return redis.NewClient(&redis.Options{
-    Addr:     fmt.Sprintf("%v:%v", connection.host, connection.port),
-    Password: connection.password,
+    Addr:     fmt.Sprintf("%v:%v", connection.Host, connection.Port),
+    Password: connection.Password,
     DB:       0,
   })
 }
