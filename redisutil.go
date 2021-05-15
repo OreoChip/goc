@@ -58,15 +58,6 @@ func XReadGroupBlocking(xReadGroupArgs *redis.XReadGroupArgs, client *redis.Clie
             _, err := client.XAck(ctx, result.Stream, xReadGroupArgs.Group, message.ID).Result()
             if (err != nil) { panic(err); }
           }
-          //currentStreams[updateIndex] = stream
-          //xReadGroupArgs = &redis.XReadGroupArgs{
-          //  Group: xReadGroupArgs.Group,
-          //  Consumer: xReadGroupArgs.Consumer,
-          //  Streams: currentStreams,
-          //  Count: xReadGroupArgs.Count,
-          //  Block: xReadGroupArgs.Block,
-          //  NoAck: xReadGroupArgs.NoAck,
-          //}
         }
       }
     }
