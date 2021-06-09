@@ -67,3 +67,17 @@ func XReadGroupBlocking(xReadGroupArgs *redis.XReadGroupArgs, client *redis.Clie
   }
   return nil
 }
+
+func InsertInStream(client *redis.Client, stream string, id string, values []string, maxLen int64, maxLenApprox int64) {
+  xAddArgs := redis.XAddArgs{}
+  xAddArgs.Stream = stream
+  xAddArgs.ID = id
+  xAddArgs.Values = values
+  if (maxLen != 0) {
+    xAddArgs.MaxLen = maxLen
+  }
+  if (maxLenApprox != 0) {
+    xAddArgs.MaxLenApprox = maxLenApprox
+  }
+  client.XAdd(ctx, &xAddArgs)
+}
