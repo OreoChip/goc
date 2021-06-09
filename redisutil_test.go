@@ -149,3 +149,15 @@ func TestXReadGroupBlockingAck(*testing.T) {
   _, err = client.XGroupDestroy(ctx, "stream-1", "mygroup").Result()
 }
 
+func TestInsertInStream(*testing.T) {
+  client := GetClient(connection)
+  client.Del(ctx, "test-stream")
+  InsertInStream(client, "test-stream", "*", []string{"message", "test-message"}, 0, 0)
+  InsertInStream(client, "test-stream", "*", []string{"message", "test-message"}, 0, 0)
+  streamLength := client.XLen(ctx, "test-stream").Val()
+  if (streamLength != 2) { panic("Insert in stream should add two messages.") }
+  client.Del(ctx, "test-stream")
+  InsertInStream(client, "test-stream", "*", []string{"message", "test-message"}, 0, 0)
+  InsertInStream(client, "test-stream", "*", []string{"message", "test-message"}, 1, 0)
+  if (client.XLen(ctx, "test-stream").Val() != 1) { panic("Insert in stream should have 1 message if max length is 1") }
+}
