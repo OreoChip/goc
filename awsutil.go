@@ -24,7 +24,7 @@ import (
 // Usage:
 //   # Upload myfile.txt to myBucket/myKey. Must complete within 10 minutes or will fail
 //   go run withContext.go -b mybucket -k myKey -d 10m < myfile.txt
-func uploadToS3(bucket string, key string, timeout time.Duration, filePath string) {
+func UploadToS3(bucket string, key string, timeout time.Duration, filePath string) {
 
 	// All clients require a Session. The Session provides the client with
 	// shared configuration such as region, endpoint, and credentials. A
