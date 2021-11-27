@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"time"
+  "bytes"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -23,7 +24,7 @@ import (
 // Usage:
 //   # Upload myfile.txt to myBucket/myKey. Must complete within 10 minutes or will fail
 //   go run withContext.go -b mybucket -k myKey -d 10m < myfile.txt
-func uploadToS3(bucket string, key string, timeout time.Duration) {
+func uploadToS3(bucket string, key string, timeout time.Duration, filePath string) {
 
 	// All clients require a Session. The Session provides the client with
 	// shared configuration such as region, endpoint, and credentials. A
@@ -53,10 +54,23 @@ func uploadToS3(bucket string, key string, timeout time.Duration) {
 
 	// Uploads the object to S3. The Context will interrupt the request if the
 	// timeout expires.
+  file, er := os.Open(filePath)
+  if (er != nil) {
+    panic(er)
+  }
+  defer file.Close()
+
+  // Get file size and read the file content into a buffer
+  fileInfo, _ := file.Stat()
+  var size int64 = fileInfo.Size()
+  buffer := make([]byte, size)
+  file.Read(buffer)
+
+
 	_, err := svc.PutObjectWithContext(ctx, &s3.PutObjectInput{
 		Bucket: aws.String(bucket),
 		Key:    aws.String(key),
-		Body:   os.Stdin,
+		Body:   bytes.NewReader(buffer),
 	})
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok && aerr.Code() == request.CanceledErrorCode {
