@@ -31,7 +31,7 @@ func UploadToS3(bucket string, key string, timeout time.Duration, filePath strin
 	// Session should be shared where possible to take advantage of
 	// configuration and credential caching. See the session package for
 	// more information.
-	sess := session.Must(session.NewSession())
+	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String("ap-south-1")},))
 
 	// Create a new instance of the service's client with a Session.
 	// Optional aws.Config values can also be provided as variadic arguments
